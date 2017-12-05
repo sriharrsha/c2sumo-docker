@@ -1,0 +1,28 @@
+version: "3.4"
+
+services:
+  mongodb:
+    image: mongo
+    ports:
+      - "27017"
+    networks:
+      - dbnet
+    command: mongod --dbpath /data/db --logpath /data/db/log --noauth
+    
+  appdock:
+    build: ./Dockerfiles/appdock/
+    ports:
+      - 80:80
+    networks:
+      - dbnet
+    depends_on:
+      - mongodb
+    links:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017
+    tty: true
+    command: /bin/bash -c "./dbinit.sh && /bin/bash"
+    
+networks:
+  dbnet:
