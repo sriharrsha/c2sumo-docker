@@ -7,6 +7,8 @@ services:
       - "27017"
     networks:
       - dbnet
+    volumes:
+      - dbdata:/data/db
     command: mongod --dbpath /data/db --logpath /data/db/log --noauth
     
   appdock:
@@ -26,3 +28,6 @@ services:
     
 networks:
   dbnet:
+
+volumes:
+  dbdata:
